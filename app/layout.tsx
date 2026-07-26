@@ -17,9 +17,6 @@ export const metadata: Metadata = {
   title: 'Reseller Bus | UK Wholesale Clothing Bales',
   description:
     'Premium 50kg cream grade clothing bales and liquidation stock for resellers in the UK, Ghana, Nigeria, Gambia, and Europe. Quality-checked, trusted, and ready to ship.',
-  icons: {
-    icon: '/images/logo.jpg',
-  },
 };
 
 export default function RootLayout({
