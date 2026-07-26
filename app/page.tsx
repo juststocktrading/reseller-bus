@@ -60,8 +60,8 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden text-white min-h-[70vh] sm:min-h-[75vh] flex items-end sm:items-center">
         <Image
-          src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80"
-          alt="Wholesale clothing background"
+          src="/images/hero-bg.png"
+          alt="Family wearing quality wholesale clothing"
           fill
           priority
           className="object-cover object-center"
