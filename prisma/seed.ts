@@ -140,9 +140,11 @@ async function main() {
   ];
 
   for (const prod of productsData) {
+    // Only creates products that don't exist yet (by slug) - never overwrites
+    // live price/stock/description edits made through the Admin Panel.
     await prisma.product.upsert({
       where: { slug: prod.slug },
-      update: prod,
+      update: {},
       create: prod,
     });
   }
