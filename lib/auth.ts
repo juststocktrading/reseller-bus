@@ -3,7 +3,10 @@ import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { prisma } from './db';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'reseller-bus-super-secret-jwt-key-2026';
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_NAME = 'reseller_bus_session';
 
 export interface JWTPayload {

@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -20,7 +20,7 @@ async function main() {
         countryCode: '+44',
         mobileNumber: '07344056285',
         passwordHash,
-        role: Role.SUPER_ADMIN,
+        role: 'SUPER_ADMIN',
       },
     });
     console.log('Created Super Admin: admin@resellerbus.co.uk / Password123!');
@@ -98,7 +98,7 @@ async function main() {
       description: 'High demand UK gents clothing mix featuring polo shirts, denim jeans, chinos, jackets, and smart casual shirts.',
       images: JSON.stringify([
         'https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?auto=format&fit=crop&w=800&q=80',
       ]),
     },
     {
