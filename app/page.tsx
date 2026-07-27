@@ -60,11 +60,19 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden text-white min-h-[70vh] sm:min-h-[75vh] flex items-end sm:items-center">
         <Image
+          src="/images/hero-bg-mobile.png"
+          alt="Family wearing quality wholesale clothing"
+          fill
+          priority
+          className="object-cover object-center lg:hidden"
+          sizes="100vw"
+        />
+        <Image
           src="/images/hero-bg.png"
           alt="Family wearing quality wholesale clothing"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center hidden lg:block"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-black/40" />

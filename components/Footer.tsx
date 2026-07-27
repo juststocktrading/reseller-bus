@@ -38,6 +38,21 @@ export default function Footer() {
                 Contact
               </Link>
             </li>
+            <li>
+              <Link href="/faq" className="hover:text-white transition">
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="hover:text-white transition">
+                Terms & Conditions
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy" className="hover:text-white transition">
+                Privacy Policy
+              </Link>
+            </li>
           </ul>
         </div>
 

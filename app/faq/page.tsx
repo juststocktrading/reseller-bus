@@ -11,12 +11,12 @@ export const metadata = {
 export default function FAQPage() {
   const faqs = [
     {
-      q: 'How do you Sell?',
-      a: 'We sell our New With Tags clothing in 50kg bags (bales).',
+      q: 'What do you Sell?',
+      a: 'We sell cream grade and new with tags clothing.',
     },
     {
-      q: 'How much is your Bale?',
-      a: 'Our Bales are 50 kg in size:\n• Kiddies Mix — £600\n• Women Mix — £500\n• Men Mix — £750\n• General Mix — £590',
+      q: 'What is the size of your Bale?',
+      a: 'Our Bales are 25 kg and 50 kg in sizes.',
     },
     {
       q: 'What is the cost of shipping within the UK?',
@@ -24,43 +24,43 @@ export default function FAQPage() {
     },
     {
       q: 'What is the cost of shipping to Europe?',
-      a: 'All Europe shipping is calculated on a pro-rata basis.',
+      a: 'All Europe shipping are calculated pro-rata basis.',
     },
     {
       q: 'What is the cost of shipping to Africa?',
-      a: '• Ghana — £50 per bale\n• Nigeria — £60 per bale\n• Gambia — £80 per bale',
+      a: '• Ghana — £50\n• Nigeria — £60\n• Gambia — £80',
     },
     {
       q: 'Do you accept credit cards?',
-      a: 'Yes, you can buy securely using credit cards and debit cards directly on our website.',
+      a: 'Yes, you can buy using credit cards on our website.',
     },
     {
       q: 'Do you do payment on delivery?',
-      a: 'No, full payment validates every order before stock dispatch.',
+      a: 'No, payment validates order.',
     },
     {
       q: 'What Brands are in your bales?',
-      a: 'Our bales contain top UK high street brands. You can check out sample videos and photos on our TikTok page (@resellerbus).',
+      a: 'Our bales contain top UK high street brands. You can check out samples on our TikTok page.',
     },
     {
       q: 'Are the items used or new?',
-      a: 'Our clothing items are new with tags (95% Cream Grade NWT).',
+      a: 'Our clothing are new with tags. (95%)',
     },
     {
       q: 'How many items are in your bales?',
-      a: 'Item counts on bales vary because garment weights vary. Estimated piece counts per 50kg bale:\n• Ladies Mix: 160 - 200 + items\n• Kids Mix: 320 - 380 items\n• Mens Mix: 150 - 190 items',
+      a: 'The item counts in our 25 kg or 50 kg bales vary because the weight of clothes vary.\n\nEstimate for 25 Kg:\n• 80 - 100 + items for ladies\n• 160 - 190 items for Kids\n• 70 - 95 items for Men\n\nEstimate for 50 Kg:\n• 160 - 200 + items for ladies\n• 320 - 380 items for Kids\n• 150 - 190 items for Men',
     },
     {
       q: 'Do you accept returns or give refunds?',
-      a: 'No refunds or returns. All sales are final trade wholesale purchases.',
+      a: 'No refunds or returns.',
     },
     {
       q: 'Can I pick up?',
-      a: 'Yes, you can pick up at our office upon appointment (Unit 7, 5 Alive, York Road, Bradford BD8 0HR).',
+      a: 'Yes, you can pick up at our office upon appointment.',
     },
     {
       q: 'Can I choose specific brands?',
-      a: 'No, we pack our items based on listed categories and the ratio of contents may vary in sealed sacks.',
+      a: 'No, we pack our items based on the listed categories and the ratio of the contents may vary.',
     },
   ];
 
@@ -73,7 +73,7 @@ export default function FAQPage() {
         </div>
         <h1 className="text-2xl sm:text-4xl font-black text-card-foreground">Frequently Asked Questions</h1>
         <p className="text-xs text-muted-foreground max-w-lg mx-auto">
-          Everything you need to know about our 50kg wholesale bales, shipping, pricing, and business trade terms.
+          Everything you need to know about our wholesale bales, shipping, pricing, and business trade terms.
         </p>
       </div>
 
@@ -84,6 +84,19 @@ export default function FAQPage() {
             <p className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed break-words">{faq.a}</p>
           </div>
         ))}
+      </div>
+
+      <div className="bg-card border border-border p-6 sm:p-8 rounded-3xl text-center space-y-2">
+        <p className="text-sm font-bold text-card-foreground">
+          Important: Please read our{' '}
+          <Link href="/terms" className="text-brand-red underline">
+            Terms and Conditions
+          </Link>{' '}
+          before placing an order.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          By Purchasing from Reseller Bus, you acknowledge and accept our terms and conditions.
+        </p>
       </div>
 
       <div className="bg-card border border-border p-8 rounded-3xl text-center space-y-4 shadow-xl">

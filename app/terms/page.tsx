@@ -23,12 +23,12 @@ export default function TermsPage() {
 
       <div className="space-y-6 bg-card border border-border p-5 sm:p-8 rounded-3xl shadow-xl">
         <section className="space-y-2">
-          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Products & Stock Disclaimers</h2>
+          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Products</h2>
           <p>For resellers, we offer new clothes with tags and wholesale cream-grade garments.</p>
           <p>By making a purchase from us, you understand and agree that:</p>
           <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
             <li>Unless otherwise noted, the majority of the items are either cream grade or brand-new with tags.</li>
-            <li>There may be differences in brands, styles, sizes, colours, quality, and quantity.</li>
+            <li>There may be differences in brands, styles, sizes, colours, quality, and number.</li>
             <li>Certain brands, products, sizes, colours, or quantities cannot be guaranteed.</li>
             <li>For illustration purposes, sample photos and videos are included.</li>
             <li>Resale value, demand, and profitability may differ depending on the selling platform and the client.</li>
@@ -52,11 +52,17 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-2 border-t border-border pt-6">
-          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Orders, Pricing & Payment</h2>
+          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Orders</h2>
           <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
             <li>Every order is based on availability.</li>
             <li>We hold the right to not accept or cancel orders as deemed necessary.</li>
-            <li>The customer is responsible for the accuracy of all information submitted during purchase.</li>
+            <li>The customer is responsible for the accuracy of every information submitted during purchase.</li>
+          </ul>
+        </section>
+
+        <section className="space-y-2 border-t border-border pt-6">
+          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Pricing & Payment</h2>
+          <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
             <li>All our products are priced in GBP (£).</li>
             <li>Full payment is expected before stocks are shipped or picked up.</li>
             <li>We have the right to change prices as deemed fit.</li>
@@ -64,23 +70,22 @@ export default function TermsPage() {
         </section>
 
         <section className="space-y-2 border-t border-border pt-6">
-          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Shipping & Delays</h2>
+          <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">Shipping</h2>
           <p>Shipping information and delivery estimates can be found in our FAQ page.</p>
           <p>We are not responsible for delays caused by:</p>
           <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-            <li>Delivery companies or logistics carriers</li>
-            <li>Customs inspection or export delays</li>
-            <li>Errors caused by customer address submission</li>
+            <li>Delivery companies</li>
+            <li>Customs delays</li>
+            <li>Errors caused by customers</li>
             <li>Circumstances outside our reasonable control</li>
           </ul>
         </section>
 
         <section className="space-y-2 border-t border-border pt-6 bg-rose-50 p-4 rounded-xl border border-rose-200">
           <h2 className="text-sm font-bold text-rose-700 uppercase tracking-wider flex items-center gap-1.5">
-            <FiAlertTriangle /> Returns & Refunds Policy
+            <FiAlertTriangle /> Returns & Refunds
           </h2>
-          <p className="font-bold text-foreground">Please note we do not accept returns or issue refunds.</p>
-          <p className="text-muted-foreground">All sales are final trade wholesale transactions.</p>
+          <p className="font-bold text-foreground">Please we do not accept returns or issue refunds.</p>
         </section>
 
         <div className="pt-4 border-t border-border text-center text-muted-foreground">

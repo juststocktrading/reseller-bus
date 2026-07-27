@@ -4,7 +4,7 @@ import { FiClock, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 
 export const metadata = {
   title: 'Pre-Order Information | Reseller Bus',
-  description: 'Learn about pre-ordering high demand 50kg wholesale clothing bales from Reseller Bus. Secure premium stock before container arrival.',
+  description: 'Learn about pre-ordering high demand wholesale clothing bales from Reseller Bus. Secure premium stock before container arrival.',
 };
 
 export default function PreOrdersPage() {
@@ -17,15 +17,16 @@ export default function PreOrdersPage() {
         </div>
         <h1 className="text-2xl sm:text-4xl font-black text-card-foreground">Pre-Order Information</h1>
         <p className="text-muted-foreground max-w-lg mx-auto">
-          You can pay for orders before stocks arrive. Join our waiting list for high demand stocks to ensure you are never left out from premium supplies.
+          You can pay for orders before stocks arrive.
         </p>
       </div>
 
       <div className="bg-card border border-border p-5 sm:p-8 rounded-3xl space-y-6 shadow-xl">
         <section className="space-y-3">
           <h2 className="text-sm font-bold text-brand-red uppercase tracking-wider">How Pre-Orders Work</h2>
-          <p>The supply of stocks rises and falls due to seasonal movement of the market.</p>
-          <p>Pre-orders can be done by making full payment for stocks listed as pre-orders on our platform.</p>
+          <p>The supply of stocks rise and fall due to seasonal movement of the market.</p>
+          <p>You can join our waiting list for high demand stocks, to ensure you are never left out from premium supplies.</p>
+          <p>Pre-orders can be done by making full payment for stocks listed as pre-orders.</p>
         </section>
 
         <section className="space-y-3 border-t border-border pt-6">
@@ -46,7 +47,10 @@ export default function PreOrdersPage() {
         </section>
 
         <section className="border-t border-border pt-6 text-center space-y-4">
-          <p className="font-bold text-foreground text-sm">By pre-ordering, you accept these terms. We truly appreciate your business!</p>
+          <p className="font-bold text-foreground text-sm">
+            By pre-ordering, you accept these terms. We truly appreciate your business.
+          </p>
+          <p className="text-brand-red font-bold uppercase tracking-wide text-xs">Helping Resellers Thrive.</p>
           <div>
             <Link href="/shop?isPreOrder=true" className="btn-pill inline-flex items-center space-x-2">
               <span>View Available Pre-Order Bales</span>
