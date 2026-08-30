@@ -7,21 +7,25 @@ import { ProductService } from '@/services/product-service';
 import { OrderService } from '@/services/order-service';
 import { AdminService } from '@/services/admin-service';
 import { ContactService, ContactMessage } from '@/services/contact-service';
+import { PaymentService, Payment } from '@/services/payment-service';
 import AdminAnalyticsDashboard from '@/components/features/admin/AdminAnalyticsDashboard';
 import UserManagementTable from '@/components/features/admin/UserManagementTable';
 import ProductFormModal from '@/components/features/admin/ProductFormModal';
 import OrderListTable from '@/components/features/admin/OrderListTable';
+import PaymentListTable from '@/components/features/admin/PaymentListTable';
+import PaymentSettingsPanel from '@/components/features/admin/PaymentSettingsPanel';
 import { Product, Order, User } from '@/lib/types';
-import { FiTrendingUp, FiBox, FiShoppingBag, FiUsers, FiShield, FiShoppingCart, FiList, FiPlusCircle, FiEdit, FiTrash2, FiMail } from 'react-icons/fi';
+import { FiTrendingUp, FiBox, FiShoppingBag, FiUsers, FiShield, FiShoppingCart, FiList, FiPlusCircle, FiEdit, FiTrash2, FiMail, FiCreditCard, FiSettings } from 'react-icons/fi';
 
 export default function AdminPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'orders' | 'users' | 'carts' | 'messages' | 'audit'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'orders' | 'payments' | 'users' | 'carts' | 'messages' | 'audit' | 'settings'>('analytics');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [carts, setCarts] = useState<any[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -42,10 +46,11 @@ export default function AdminPage() {
       }
       setCurrentUser(me.user);
 
-      const [pRes, cRes, oRes, uRes, cartRes, messagesRes, auditRes] = await Promise.all([
+      const [pRes, cRes, oRes, payRes, uRes, cartRes, messagesRes, auditRes] = await Promise.all([
         ProductService.getProducts(),
         fetch('/api/categories').then((r) => r.json()),
         OrderService.getOrders(),
+        PaymentService.getPayments(),
         AdminService.getUsers(),
         AdminService.getLiveCarts(),
         ContactService.getAll(),
@@ -55,6 +60,7 @@ export default function AdminPage() {
       setProducts(pRes.products || []);
       setCategories(cRes.categories || []);
       setOrders(oRes.orders || []);
+      setPayments(payRes.payments || []);
       setUsers(uRes.users || []);
       setCarts(cartRes.carts || []);
       setMessages(messagesRes.messages || []);
@@ -94,18 +100,23 @@ export default function AdminPage() {
   }
 
   // Calculate Metrics
-  const totalRevenue = orders.reduce((sum, o) => (o.status === 'PAID' || o.status === 'SHIPPED' || o.status === 'DELIVERED' ? sum + o.totalAmount : sum), 0);
+  const paidStatuses = ['PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CLOSED'];
+  const totalRevenue = orders.reduce((sum, o) => (paidStatuses.includes(o.status) ? sum + o.totalAmount : sum), 0);
   const lowStockCount = products.filter((p) => p.stockCount <= 3).length;
   const unreadMessages = messages.filter((m) => !m.isRead).length;
+
+  const isStaffOnly = currentUser?.role === 'STAFF';
 
   const tabs: { key: typeof activeTab; label: string; icon: React.ReactNode; count: number }[] = [
     { key: 'analytics', label: 'Analytics', icon: <FiTrendingUp />, count: -1 },
     { key: 'products', label: 'Products', icon: <FiBox />, count: products.length },
     { key: 'orders', label: 'Orders', icon: <FiShoppingBag />, count: orders.length },
+    { key: 'payments', label: 'Payments', icon: <FiCreditCard />, count: payments.length },
     { key: 'users', label: 'Users', icon: <FiUsers />, count: users.length },
     { key: 'carts', label: 'Carts', icon: <FiShoppingCart />, count: carts.length },
     { key: 'messages', label: 'Messages', icon: <FiMail />, count: messages.length },
     { key: 'audit', label: 'Audit', icon: <FiList />, count: auditLogs.length },
+    ...(!isStaffOnly ? [{ key: 'settings' as const, label: 'Payment Settings', icon: <FiSettings />, count: -1 }] : []),
   ];
 
   return (
@@ -248,6 +259,12 @@ export default function AdminPage() {
           onRefresh={fetchData}
         />
       )}
+
+      {/* Payments Tab */}
+      {activeTab === 'payments' && <PaymentListTable payments={payments} />}
+
+      {/* Payment Settings Tab (ADMIN / SUPER_ADMIN only) */}
+      {activeTab === 'settings' && !isStaffOnly && <PaymentSettingsPanel />}
 
       {/* Users & Staff Tab */}
       {activeTab === 'users' && (

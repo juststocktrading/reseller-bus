@@ -56,7 +56,7 @@ export interface Order {
   orderNumber: string;
   userId: string;
   user: User;
-  status: 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+  status: 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CLOSED' | 'CANCELLED';
   shippingMethod: 'DELIVERY' | 'PICKUP_BRADFORD';
   totalAmount: number;
   shippingCost: number;

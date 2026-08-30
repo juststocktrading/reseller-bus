@@ -76,7 +76,7 @@ model Order {
   orderNumber     String         @unique
   userId          String
   user            User           @relation(fields: [userId], references: [id])
-  status          String         @default("PENDING") // PENDING, PAID, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  status          String         @default("PENDING") // PENDING, PAID, PROCESSING, SHIPPED, DELIVERED, CLOSED, CANCELLED
   shippingMethod  String         @default("DELIVERY") // DELIVERY, PICKUP_BRADFORD
   totalAmount     Float
   shippingCost    Float          @default(0)
@@ -92,6 +92,33 @@ model Order {
   updatedAt       DateTime       @updatedAt
 
   items           OrderItem[]
+  payments        Payment[]
+}
+
+model Payment {
+  id                    String   @id @default(uuid())
+  orderId               String
+  order                 Order    @relation(fields: [orderId], references: [id])
+  orderNumber           String
+  amount                Float
+  currency              String   @default("gbp")
+  status                String   // SUCCEEDED, FAILED, REFUNDED
+  stripePaymentIntentId String?
+  stripeChargeId        String?
+  receiptUrl            String?
+  cardBrand             String?
+  cardLast4             String?
+  failureReason         String?
+  createdAt             DateTime @default(now())
+}
+
+model PaymentSettings {
+  id             String   @id @default("default")
+  publishableKey String?
+  secretKey      String?  // AES-256-GCM encrypted
+  webhookSecret  String?  // AES-256-GCM encrypted
+  updatedByName  String?
+  updatedAt      DateTime @updatedAt
 }
 
 model OrderItem {

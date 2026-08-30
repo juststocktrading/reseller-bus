@@ -5,6 +5,7 @@ import { Order, User, Product } from '@/lib/types';
 import { OrderService } from '@/services/order-service';
 import { sanitizeDigits } from '@/lib/input-utils';
 import ExportInvoiceModal from '@/components/ExportInvoiceModal';
+import ShareLinkMenu from './ShareLinkMenu';
 import { FiPackage, FiTruck, FiFileText, FiPlusCircle, FiCheck, FiX } from 'react-icons/fi';
 
 interface Props {
@@ -142,6 +143,10 @@ export default function OrderListTable({ orders, users, products, onRefresh }: P
                         ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                         : order.status === 'SHIPPED'
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
+                        : order.status === 'CLOSED'
+                        ? 'bg-slate-100 text-slate-600 border-slate-300'
+                        : order.status === 'CANCELLED'
+                        ? 'bg-rose-50 text-rose-700 border-rose-200'
                         : 'bg-amber-50 text-amber-700 border-amber-200'
                     }`}
                   >
@@ -172,6 +177,24 @@ export default function OrderListTable({ orders, users, products, onRefresh }: P
                   >
                     <FiFileText /> Invoice
                   </button>
+                  <ShareLinkMenu
+                    label="Share"
+                    subject={`Invoice ${order.orderNumber} — Reseller Bus`}
+                    message={(url) =>
+                      `Hi ${order.user?.firstName}, here's your Reseller Bus invoice for order ${order.orderNumber}: ${url}`
+                    }
+                    whatsappPhone={
+                      order.user?.countryCode && order.user?.mobileNumber
+                        ? `${order.user.countryCode.replace('+', '')}${order.user.mobileNumber.replace(/^0/, '')}`
+                        : undefined
+                    }
+                    getUrl={async () => {
+                      const res = await fetch(`/api/admin/orders/${order.id}/share-link`);
+                      const data = await res.json();
+                      if (!res.ok) throw new Error(data.error || 'Failed to generate link');
+                      return data.url;
+                    }}
+                  />
                 </td>
               </tr>
             ))}
@@ -197,6 +220,7 @@ export default function OrderListTable({ orders, users, products, onRefresh }: P
                   <option value="PROCESSING">PROCESSING</option>
                   <option value="SHIPPED">SHIPPED</option>
                   <option value="DELIVERED">DELIVERED</option>
+                  <option value="CLOSED">CLOSED</option>
                   <option value="CANCELLED">CANCELLED</option>
                 </select>
               </div>

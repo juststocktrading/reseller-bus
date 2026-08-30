@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       createdByName,
     });
 
-    const stripe = getStripe();
+    const stripe = await getStripe();
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(order.totalAmount * 100),
       currency: 'gbp',

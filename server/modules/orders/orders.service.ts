@@ -114,7 +114,7 @@ export class OrdersService {
     return await prisma.order.findMany({
       where,
       include: {
-        user: { select: { id: true, firstName: true, lastName: true, email: true, mobileNumber: true } },
+        user: { select: { id: true, firstName: true, lastName: true, email: true, countryCode: true, mobileNumber: true } },
         items: { include: { product: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -129,6 +129,10 @@ export class OrdersService {
         items: { include: { product: true } },
       },
     });
+  }
+
+  static async getOrderByPaymentIntent(paymentIntentId: string) {
+    return await prisma.order.findFirst({ where: { stripePaymentId: paymentIntentId } });
   }
 
   static async attachStripePaymentIntent(orderId: string, paymentIntentId: string) {
