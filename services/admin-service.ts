@@ -40,6 +40,12 @@ export class AdminService {
     });
   }
 
+  static async reset2FA(id: string) {
+    return apiClient<{ success: boolean; user: User }>(`/api/admin/users/${id}/reset-2fa`, {
+      method: 'POST',
+    });
+  }
+
   static async getLiveCarts() {
     return apiClient<{ carts: any[] }>('/api/admin/carts');
   }

@@ -25,8 +25,12 @@ export async function middleware(req: NextRequest) {
     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com;"
   );
 
-  // 2. Rate Limiting for Auth Endpoints
-  if (pathname.startsWith('/api/auth/login') || pathname.startsWith('/api/auth/register')) {
+  // 2. Rate Limiting for Auth Endpoints (includes 2FA — a 6-digit code is brute-forceable otherwise)
+  if (
+    pathname.startsWith('/api/auth/login') ||
+    pathname.startsWith('/api/auth/register') ||
+    pathname.startsWith('/api/auth/2fa')
+  ) {
     const ip = req.ip || req.headers.get('x-forwarded-for') || '127.0.0.1';
     const now = Date.now();
     const limitRecord = ipRateLimits.get(ip) || { count: 0, timestamp: now };

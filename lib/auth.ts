@@ -37,6 +37,32 @@ export function verifyToken(token: string): JWTPayload | null {
   }
 }
 
+export type PendingAuthPurpose = 'login_2fa' | 'setup_2fa';
+
+interface PendingAuthPayload {
+  userId: string;
+  purpose: PendingAuthPurpose;
+}
+
+/**
+ * Short-lived token used between password verification and 2FA verification. Returned in the
+ * JSON response body only (never set as a cookie) so it alone can never create a session —
+ * the matching TOTP code is still required.
+ */
+export function generatePendingToken(payload: PendingAuthPayload, expiresIn: jwt.SignOptions['expiresIn'] = '5m'): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+}
+
+export function verifyPendingToken(token: string, expectedPurpose: PendingAuthPurpose): PendingAuthPayload | null {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as PendingAuthPayload;
+    if (decoded.purpose !== expectedPurpose) return null;
+    return decoded;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function getSessionUser(): Promise<JWTPayload | null> {
   const cookieStore = cookies();
   const token = cookieStore.get(TOKEN_NAME)?.value;

@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import { User } from '@/lib/types';
 import { AdminService } from '@/services/admin-service';
 import { sanitizeDigits } from '@/lib/input-utils';
-import { FiUserPlus, FiKey, FiSlash, FiCheck, FiShield, FiUser } from 'react-icons/fi';
+import { FiUserPlus, FiKey, FiSlash, FiCheck, FiShield, FiUser, FiLock } from 'react-icons/fi';
+
+const ADMIN_ROLES = ['STAFF', 'ADMIN', 'SUPER_ADMIN'];
 
 interface Props {
   users: User[];
@@ -53,6 +55,16 @@ export default function UserManagementTable({ users, onRefresh, currentUserRole 
       setResetCodeModal({ user, code: res.resetCode });
     } catch (e: any) {
       alert(e.message || 'Failed to generate code');
+    }
+  };
+
+  const handleReset2FA = async (user: User) => {
+    if (!confirm(`Reset 2FA for ${user.firstName} ${user.lastName}? They will need to re-enroll (scan a new QR code) on their next login.`)) return;
+    try {
+      await AdminService.reset2FA(user.id);
+      onRefresh();
+    } catch (e: any) {
+      alert(e.message || 'Failed to reset 2FA');
     }
   };
 
@@ -139,14 +151,25 @@ export default function UserManagementTable({ users, onRefresh, currentUserRole 
                     <span className="font-bold text-brand-red">{user.role}</span>
                   )}
                 </td>
-                <td className="py-3.5 px-4">
+                <td className="py-3.5 px-4 space-y-1">
                   {user.isSuspended ? (
-                    <span className="bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded">
+                    <span className="block w-fit bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded">
                       Suspended
                     </span>
                   ) : (
-                    <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded">
+                    <span className="block w-fit bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded">
                       Active
+                    </span>
+                  )}
+                  {ADMIN_ROLES.includes(user.role) && (
+                    <span
+                      className={`block w-fit text-[10px] font-bold px-2 py-0.5 rounded border ${
+                        user.totpEnabled
+                          ? 'bg-blue-50 text-blue-700 border-blue-200'
+                          : 'bg-amber-50 text-amber-700 border-amber-200'
+                      }`}
+                    >
+                      {user.totpEnabled ? '2FA On' : '2FA Not Set Up'}
                     </span>
                   )}
                 </td>
@@ -158,6 +181,15 @@ export default function UserManagementTable({ users, onRefresh, currentUserRole 
                   >
                     <FiKey /> Code
                   </button>
+                  {currentUserRole === 'SUPER_ADMIN' && ADMIN_ROLES.includes(user.role) && user.totpEnabled && (
+                    <button
+                      onClick={() => handleReset2FA(user)}
+                      className="bg-muted hover:bg-border text-foreground px-2.5 py-1 rounded text-[11px] font-semibold transition inline-flex items-center gap-1"
+                      title="Reset 2FA (they'll re-enroll next login)"
+                    >
+                      <FiLock /> Reset 2FA
+                    </button>
+                  )}
                   {currentUserRole === 'SUPER_ADMIN' && (
                     <button
                       onClick={() => handleToggleSuspend(user.id)}

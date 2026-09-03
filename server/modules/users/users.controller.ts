@@ -74,4 +74,20 @@ export class UsersController {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
   }
+
+  static async reset2FA(id: string) {
+    try {
+      const session = await getSessionUser();
+      // Deliberately SUPER_ADMIN only — an ADMIN/STAFF should not be able to strip another
+      // admin's 2FA (that would be a privilege-escalation path for account takeover).
+      if (!session || session.role !== 'SUPER_ADMIN') {
+        return NextResponse.json({ error: 'Only Super Admin can reset another account\'s 2FA' }, { status: 403 });
+      }
+
+      const updated = await UsersService.reset2FAForUser(id, session.userId);
+      return NextResponse.json({ success: true, user: updated });
+    } catch (error: any) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+  }
 }

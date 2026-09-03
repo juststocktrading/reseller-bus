@@ -40,6 +40,7 @@ export interface User {
   mobileNumber: string;
   role: 'USER' | 'STAFF' | 'ADMIN' | 'SUPER_ADMIN';
   isSuspended: boolean;
+  totpEnabled?: boolean;
   createdAt: string;
 }
 
