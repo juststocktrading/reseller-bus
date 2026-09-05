@@ -6,11 +6,9 @@ import { useCart } from '@/lib/cart-context';
 import { OrderService } from '@/services/order-service';
 import { AuthService } from '@/services/auth-service';
 import StripePaymentForm from '@/components/checkout/StripePaymentForm';
-import InvoiceDocument from '@/components/InvoiceDocument';
-import InvoicePrintButton from '@/components/InvoicePrintButton';
 import { sanitizeDigits } from '@/lib/input-utils';
 import { Order } from '@/lib/types';
-import { FiCheckCircle, FiTruck, FiMapPin, FiCreditCard, FiLock, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { FiTruck, FiMapPin, FiCreditCard, FiLock, FiArrowLeft, FiCheck } from 'react-icons/fi';
 
 type Step = 'details' | 'payment' | 'success';
 
@@ -70,8 +68,8 @@ export default function CheckoutPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState<Order | null>(null);
-  const [payment, setPayment] = useState<{ order: Order; clientSecret: string } | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
+  const [payment, setPayment] = useState<{ order: Order; clientSecret: string; invoiceToken: string } | null>(null);
 
   useEffect(() => {
     AuthService.getMe()
@@ -155,7 +153,7 @@ export default function CheckoutPage() {
             : shippingAddress,
       });
 
-      setPayment({ order: res.order, clientSecret: res.clientSecret });
+      setPayment({ order: res.order, clientSecret: res.clientSecret, invoiceToken: res.invoiceToken });
       setStep('payment');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
@@ -167,10 +165,11 @@ export default function CheckoutPage() {
 
   const handlePaymentSuccess = () => {
     if (!payment) return;
-    setOrderSuccess(payment.order);
-    setStep('success');
     clearCart();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setRedirecting(true);
+    // The receipt lives on its own dedicated page (the same one admin "Share Invoice"
+    // links point to) rather than being shown inline on the checkout page.
+    router.push(`/invoice/${payment.order.id}?token=${payment.invoiceToken}&welcome=1`);
   };
 
   const handleBackToDetails = () => {
@@ -181,37 +180,13 @@ export default function CheckoutPage() {
     setStep('details');
   };
 
-  // ---- Step 3: Confirmation + Receipt ----
-  if (step === 'success' && orderSuccess) {
+  // Payment succeeded — handlePaymentSuccess is already navigating to the receipt page.
+  // This just covers the brief moment before that navigation completes.
+  if (redirecting) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 space-y-6">
-        <StepIndicator step={step} />
-
-        <div className="bg-card border border-emerald-200 p-6 sm:p-8 rounded-3xl space-y-3 shadow-xl text-center print:hidden">
-          <FiCheckCircle className="text-5xl sm:text-6xl text-emerald-400 mx-auto animate-bounce" />
-          <h2 className="text-2xl sm:text-3xl font-black text-white">Order Confirmed!</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground break-words">
-            Thank you for your order with Reseller Bus. Your order reference is{' '}
-            <strong className="text-brand-red font-mono font-bold text-sm">{orderSuccess.orderNumber}</strong> — a copy of your receipt is below.
-          </p>
-          {!user && (
-            <p className="text-[11px] text-muted-foreground max-w-md mx-auto">
-              We've created a Reseller Bus account for you and signed you in. Head to Account settings to set your own password for next time.
-            </p>
-          )}
-          <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
-            <InvoicePrintButton />
-            <button
-              onClick={() => router.push('/account')}
-              className="bg-muted hover:bg-border text-foreground font-bold text-xs px-6 py-3.5 rounded-xl min-h-[48px]"
-            >
-              View Order in Customer Portal
-            </button>
-          </div>
-        </div>
-
-        {/* Receipt */}
-        <InvoiceDocument order={orderSuccess} />
+      <div className="max-w-md mx-auto px-4 py-24 text-center space-y-4">
+        <StepIndicator step="success" />
+        <p className="text-sm text-muted-foreground animate-pulse">Payment received — loading your receipt...</p>
       </div>
     );
   }

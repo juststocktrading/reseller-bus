@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth';
 import { getStripe } from '@/lib/stripe';
 import { OrdersService } from '@/server/modules/orders/orders.service';
+import { signInvoiceToken } from '@/lib/share-links';
 
 export async function POST(req: Request) {
   try {
@@ -40,9 +41,14 @@ export async function POST(req: Request) {
 
     await OrdersService.attachStripePaymentIntent(order.id, paymentIntent.id);
 
+    // Lets the browser deep-link straight to this order's receipt page once payment
+    // succeeds, without needing to be logged in or make an extra authenticated call.
+    const invoiceToken = signInvoiceToken(order.id);
+
     return NextResponse.json({
       order,
       clientSecret: paymentIntent.client_secret,
+      invoiceToken,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to start payment' }, { status: 400 });

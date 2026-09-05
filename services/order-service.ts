@@ -24,7 +24,7 @@ export class OrderService {
     shippingAddress: string;
     userId?: string;
   }) {
-    return apiClient<{ order: Order; clientSecret: string }>('/api/orders/create-payment-intent', {
+    return apiClient<{ order: Order; clientSecret: string; invoiceToken: string }>('/api/orders/create-payment-intent', {
       method: 'POST',
       body: JSON.stringify(data),
     });
