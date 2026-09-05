@@ -37,8 +37,8 @@ export class SettingsService {
     }
 
     const updateData: Record<string, any> = { updatedByName: adminName };
-    // Blank/omitted fields keep whatever is already stored — only overwrite what was provided.
-    if (publishableKey !== undefined) updateData.publishableKey = publishableKey || null;
+    // Blank/omitted fields keep whatever is already stored — only overwrite what was actually provided.
+    if (publishableKey) updateData.publishableKey = publishableKey;
     if (secretKey) updateData.secretKey = encrypt(secretKey);
     if (webhookSecret) updateData.webhookSecret = encrypt(webhookSecret);
 
